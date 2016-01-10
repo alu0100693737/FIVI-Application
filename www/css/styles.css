@@ -1,0 +1,14 @@
+body {
+    background-image: url("../images/fondo.jpg");
+    background-color: #cccccc;
+    padding: 15px; font-family: "french script mt" font-size: 30pt; text-align: center; margin: 5%;
+}
+footer{clear:left; padding: 15px; border: 2px dotted blue;}
+
+
+input[type=text] {
+  width: 400px;
+    height: 200px;
+  -webkit-transition: ease-in-out, width .35s ease-in-out;
+  transition: ease-in-out,width .35s ease-in-out;
+}
