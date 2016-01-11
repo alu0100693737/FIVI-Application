@@ -32,10 +32,7 @@
     <!-- Squad theme CSS -->
     <link href="css/style.css" rel="stylesheet">
 	<link href="color/default.css" rel="stylesheet">
-    <script type="text/javascript" charset="utf-8">
-
-    
-    </script>
+    <script type="text/javascript" charset="utf-8"> </script>
         <!--
         Customize this policy to fit your own app's needs. For more guidance, see:
             https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
@@ -53,6 +50,33 @@
         <link rel="stylesheet" type="text/css" href="css/index.css">
          <meta charset="UTF-8">
     <title>Reconocimiento del habla</title>
+        
+        <script>
+        
+        document.addEventListener("deviceready", onDeviceReady, false);
+
+    // PhoneGap is ready
+    //
+    function onDeviceReady() {
+        // Empty
+    }
+
+    // alert dialog dismissed
+    function alertDismissed() {
+        // do something
+    }
+
+    // Show a custom alert
+    //
+    function showAlert() {
+        navigator.notification.alert(
+            'You are in FIVI Web pages!',  // message
+            alertDismissed,         // callback
+            'FIVI',            // title
+            'Done'                  // buttonName
+        );
+    }
+        </script>
     </head>
     <body data-spy="scroll"><!--
         <div class="app">
@@ -103,9 +127,9 @@
 			<h1>This is FIVI</h1>
 			<p>una aplicación para el reconocimiento del habla</p>
             
-            <button class="btn btn-skin scroll" onclick="capturePhotoWithFile();">Capture Photo With Image File URI</button> <br>
+            <button class="btn btn-skin scroll" onclick="capturePhotoWithFile();">Capture Photo With Image File URI</button> 
     <!--<button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From Photo Library</button><br>-->
-        <button class="btn btn-skin scroll" onclick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">From Photo Album</button><br>
+        <button class="btn btn-skin scroll" onclick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">From Photo Album</button><br><br>
             <a href="#about" class="btn btn-skin scroll">Learn more</a
             <table>
             <tr>
@@ -113,6 +137,7 @@
                 <td> <img style="display:none; width:60px;height:60px;" id="largeImage" src="" /> </td>
             </tr>
             </table>
+         <p><a href="#" class="btn btn-skin scroll" onclick="showAlert(); return false;">Show Alert</a></p>
         </div>	
     </section>
         <section id="about" class="home-section text-center bg-gray">
