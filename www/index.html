@@ -95,6 +95,8 @@
     }
 
     </script>
+        
+        <!--Connections-->
         <script type="text/javascript" charset="utf-8">
 
     // Wait for PhoneGap to load
@@ -117,6 +119,49 @@
         states[Connection.NONE]     = 'No network connection';
 
         alert('Connection type: ' + states[networkState]);
+    }
+
+    </script>
+        <!-- Geolocation-->
+        <script type="text/javascript" charset="utf-8">
+
+    // Wait for PhoneGap to load
+    //
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    var watchID = null;
+
+    // PhoneGap is ready
+    //
+    function onDeviceReady() {
+        // Update every 3 seconds
+        var options = { frequency: 3000 };
+        watchID = navigator.geolocation.watchPosition(onSuccess, onError, options);
+    }
+
+    // onSuccess Geolocation
+    //
+    function onSuccess(position) {
+        var element = document.getElementById('geolocation');
+        element.innerHTML = 'Latitude: '  + position.coords.latitude      + '<br />' +
+                            'Longitude: ' + position.coords.longitude     + '<br />' +
+                            '<hr />'      + element.innerHTML;
+    }
+
+    // clear the watch that was started earlier
+    // 
+    function clearWatch() {
+        if (watchID != null) {
+            navigator.geolocation.clearWatch(watchID);
+            watchID = null;
+        }
+    }
+
+    // onError Callback receives a PositionError object
+    //
+    function onError(error) {
+      alert('code: '    + error.code    + '\n' +
+            'message: ' + error.message + '\n');
     }
 
     </script>
@@ -157,12 +202,12 @@
 					</nav>
 				</li>
 				<li><a href="index.html">FIVI</a></li>
-				<li><ul class="company-social">
+				<!--<li><ul class="company-social">
                             <li class="social-facebook"><a href="#" target="_blank"><i class="fa fa-facebook"></i></a></li>
                             <li class="social-twitter"><a href="#" target="_blank"><i class="fa fa-twitter"></i></a></li>
                             <li class="social-dribble"><a href="#" target="_blank"><i class="fa fa-dribbble"></i></a></li>
                             <li class="social-google"><a href="#" target="_blank"><i class="fa fa-google-plus"></i></a></li>
-                        </ul>	</li>
+                        </ul>	</li>-->
 			</ul>
 	   </div>
         <!-- Section: intro -->
@@ -181,18 +226,21 @@
                 <td> <img style="display:none; width:60px;height:60px;" id="largeImage" src="" /> </td>
             </tr>
             </table>
-            <br><br><a href="#about" class="btn btn-skin scroll">Learn more</a><br><br>
+            <br><br>
          <a href="#" class="btn btn-skin scroll" onclick="showAlert(); return false;">Show Alert</a><br><br>
-         <a href="#" class="btn btn-skin scroll" onclick="checkConnection(); return false;">Show Connections</a>
-        </div>	
-         <center><div id="deviceProperties" class="btn btn-skin scroll">Loading device properties...</div></center>
+         <a href="#" class="btn btn-skin scroll" onclick="checkConnection(); return false;">Show Connections</a>	<br><br>
+        <div id="geolocation" class="btn btn-skin scroll">Watching geolocation...</div><br><br>
+        <button class="btn btn-skin scroll" onclick="clearWatch();">Clear Watch</button></center><br><br>
+         <center><div id="deviceProperties" class="btn btn-skin scroll">Loading device properties...</div>
+        <br><br><a href="#about" class="btn btn-skin scroll">Learn more</a><br></center>
+            </div>
     </section>
         <section id="about" class="home-section text-center bg-gray">
 		<div class="heading-about marginbot-50">
 			<div class="container">
                 
                 <p> Elija como prefiere utilizar el asistente:</p>
-                <a href="porvoz.html" target="_blank" onClick="window.open(this.href, this.target, 'width=450,height=300'); return false;"><input type="button" class="btn btn-skin scroll" value="Reconocimiento por voz"></a>
+                <a href="porvoz.html" target="_blank" onClick="window.open(this.href, this.target, 'width=450,height=300'); return false;"><input type="button" class="btn btn-skin scroll" value="Reconocimiento por voz"></a><br> <br>
 
     <a href="porescrito.html" target="_blank" onClick="window.open(this.href, this.target, 'width=450,height=300'); return false;"><input type="button" class="btn btn-skin scroll" value="Reconocimiento por escrito"></a><br><br><br>
                 
