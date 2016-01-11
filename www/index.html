@@ -51,10 +51,9 @@
          <meta charset="UTF-8">
     <title>Reconocimiento del habla</title>
         
+        <!-- ALERTA-->
         <script>
-        
         document.addEventListener("deviceready", onDeviceReady, false);
-
     // PhoneGap is ready
     //
     function onDeviceReady() {
@@ -77,6 +76,51 @@
         );
     }
         </script>
+          <script type="text/javascript" charset="utf-8">
+
+    // Wait for PhoneGap to load
+    //
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    // PhoneGap is ready
+    //
+    function onDeviceReady() {
+        var element = document.getElementById('deviceProperties');
+
+        element.innerHTML = 'Device Name: '     + device.name     + '<br />' + 
+                            'Device PhoneGap: ' + device.phonegap + '<br />' + 
+                            'Device Platform: ' + device.platform + '<br />' + 
+                            'Device UUID: '     + device.uuid     + '<br />' + 
+                            'Device Version: '  + device.version  + '<br />';
+    }
+
+    </script>
+        <script type="text/javascript" charset="utf-8">
+
+    // Wait for PhoneGap to load
+    // 
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    // PhoneGap is loaded and it is now safe to make calls PhoneGap methods
+    //
+
+    function checkConnection() {
+        var networkState = navigator.network.connection.type;
+
+        var states = {};
+        states[Connection.UNKNOWN]  = 'Unknown connection';
+        states[Connection.ETHERNET] = 'Ethernet connection';
+        states[Connection.WIFI]     = 'WiFi connection';
+        states[Connection.CELL_2G]  = 'Cell 2G connection';
+        states[Connection.CELL_3G]  = 'Cell 3G connection';
+        states[Connection.CELL_4G]  = 'Cell 4G connection';
+        states[Connection.NONE]     = 'No network connection';
+
+        alert('Connection type: ' + states[networkState]);
+    }
+
+    </script>
+ 
     </head>
     <body data-spy="scroll"><!--
         <div class="app">
@@ -127,18 +171,21 @@
 			<h1>This is FIVI</h1>
 			<p>una aplicación para el reconocimiento del habla</p>
             
-            <button class="btn btn-skin scroll" onclick="capturePhotoWithFile();">Capture Photo With Image File URI</button> 
+            <button class="btn btn-skin scroll" onclick="capturePhotoWithFile();">Capture Photo With Image File URI</button> <br><br>
     <!--<button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From Photo Library</button><br>-->
-        <button class="btn btn-skin scroll" onclick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">From Photo Album</button><br><br>
-            <a href="#about" class="btn btn-skin scroll">Learn more</a
+        <button class="btn btn-skin scroll" onclick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">From Photo Album</button><br>
+            
             <table>
             <tr>
                 <td> <img style="display:none;float: left; width:60px;height:60px;" id="smallImage" src="" /></td>  
                 <td> <img style="display:none; width:60px;height:60px;" id="largeImage" src="" /> </td>
             </tr>
             </table>
-         <p><a href="#" class="btn btn-skin scroll" onclick="showAlert(); return false;">Show Alert</a></p>
+            <br><br><a href="#about" class="btn btn-skin scroll">Learn more</a><br><br>
+         <a href="#" class="btn btn-skin scroll" onclick="showAlert(); return false;">Show Alert</a><br><br>
+         <a href="#" class="btn btn-skin scroll" onclick="checkConnection(); return false;">Show Connections</a>
         </div>	
+         <center><div id="deviceProperties" class="btn btn-skin scroll">Loading device properties...</div></center>
     </section>
         <section id="about" class="home-section text-center bg-gray">
 		<div class="heading-about marginbot-50">
