@@ -29,7 +29,11 @@
     font-weight: 250;
   }
   #headline2 {
-    font-size: 28px;
+    font-size: 32px;
+    font-weight: 250;
+  }
+    #headline3 {
+    font-size: 12px;
     font-weight: 250;
   }
   #results {
@@ -42,23 +46,54 @@
   }
 
 </style>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+    <script type="text/javascript" src="js/globalization.js"></script>
+    <script type="text/javascript" src="js/devicemotion.js"></script>
+    <script type="text/javascript" src="js/geolocalizacion.js"></script>
+    
+
+
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-    <script type="text/javascript" src="js/globalization.js"></script>
-    <script type="text/javascript" src="js/devicemotion.js"></script>
-       
+
+    <script>
+        document.addEventListener("deviceready", onDeviceReady, false);
+    // PhoneGap is ready
+    //
+    function onDeviceReady() {
+        // Empty
+    }
+
+    // alert dialog dismissed
+    function alertDismissed() {
+        // do something
+    }
+
+    // Show a custom alert
+    //
+    function showAlert() {
+        alert("ALERTAAAAAA ");
+    }
+        </script>
 </head>
 <body>
     <div class="center" id="headline2"> 
     
-        <center><div id="globalization"><h3>Esperando por el sensor globalization</h3></div><br></center></div>
+        <center><div id="globalization"><h3>Esperando por el sensor globalization</h3></div></center></div>
+    <div class="center" id="headline3"> 
+    <center><div id="geolocation" >Watching geolocation...</div>
+        <!--<div id="orientation">Watching orientation...</div>-->
+        
+        </center></div>
+    
     <div class="center" id="headline"> 
         <center><h2>Introduzca el texto</h2></center></div>
-    <form action="javascript/fichero.js">
-        <center>Pregunta: </center><center><input type="text" name="fname";></center><br><br>
-        <center><input type="submit" class="btn btn-skin scroll" value="Enviar"></center>
+    <form id="formulario">
+        <center>Pregunta: </center><center><input type="text" id="pregunta"></center><br><br>
+        <center><input type="submit" class="btn btn-skin scroll" value="Enviar">  &nbsp; &nbsp; <a href="#" class="btn btn-skin scroll" onclick="showAlert(); return false;">Show Alert</a><br><br></center>
+        <div id="contenido"> </div>
+
+    
     </form>
     <br><br>
         <footer>
@@ -88,7 +123,26 @@
     <!-- Custom Theme JavaScript -->
     <script src="js/custom.js"></script>
     <script type="text/javascript" src="cordova.js"></script>
+    <script>
 
+        $('#formulario').submit(function() { 
+            // recolecta los valores que inserto el usuario
+        var pregunta = $("#pregunta").val()
+
+        archivoValidacion = "http://interfacesinteligentes.hol.es/Interfaces/Reconocimiento2301_1053/LeerFichero.php?jsoncallback=?"
+
+        $.getJSON( archivoValidacion, { pregunta:pregunta})
+            .done(function(respuestaServer) {
+  
+                var output = "<br><br><center><h3>" + respuestaServer.message + "</h3></center>";
+                //Actualizamos el HTML del elemento con id="#response-container"
+                         $("#contenido").html(output); 
+  
+                })
+                return false;
+            })
+	
+    </script>
 </body>
 
 </html>
