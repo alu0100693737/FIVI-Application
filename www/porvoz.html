@@ -13,10 +13,6 @@
     <link href="css/style.css" rel="stylesheet">
 	<link href="color/default.css" rel="stylesheet">
     
-<!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">-->
-        <meta name="format-detection" content="telephone=no">
-        <meta name="msapplication-tap-highlight" content="no">
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
 
 <style>
   
@@ -62,8 +58,8 @@
     vertical-align: top;
   }
   #headline {
-    font-size: 35px;
-    font-weight: 250;
+    font-size: 40px;
+    font-weight: 300;
   }
   #info {
     font-size: 20px;
@@ -85,10 +81,21 @@
     padding: 0;
   }
 </style>
+<body>
+
 <h1 class="center" id="headline">
   <a href="http://dvcs.w3.org/hg/speech-api/raw-file/tip/speechapi.html">
     Web Speech API</a> <br>Reconocimiento del habla</h1>
-<div id="info">
+<div id="Eleccion">
+        <center>
+        <input type="button" id="elegirTema" class="btn btn-skin scroll" value="Escoger un tema:"><br><br>
+        
+
+        <div id="contenidoElegir"></div>
+       
+        </center>
+</div>
+<div id="info" style="display:none;">
   <p id="info_start">Click on the microphone icon and begin speaking.</p>
   <p id="info_speak_now">Speak now.</p>
   <p id="info_no_speech">No speech was detected. You may need to adjust your
@@ -106,16 +113,16 @@
      Upgrade to <a href="//www.google.com/chrome">Chrome</a>
      version 25 or later.</p>
 </div>
-<div class="right">
+<div id="derecha" class="right" style="display:none;">
   <button id="start_button" onclick="startButton(event)">
     <img id="start_img" src="images/mic.gif" alt="Start"></button>
 </div>
-<div id="results"><!--AQUIIII!!!!!-->
+<div id="results" style="display:none;"><!--AQUIIII!!!!!-->
   <span id="final_span" class="final"></span>
   <span id="interim_span" class="interim"></span>
   <p>
 </div>
-<div class="center">
+<div id="centro" class="center" style="display:none;">
   <div class="sidebyside" style="text-align:right">
     <button id="copy_button" class="button" onclick="copyButton()">
       Copy and Paste</button>
@@ -130,6 +137,12 @@
       Text sent to default email application.<br>
       (See chrome://settings/handlers to change.)
     </div>
+    
+  </div>
+  <div class="sidebyside" style="text-align:center">
+    <br><br>
+    <input id="introducir" type="button" class="btn btn-skin scroll" value="Introducir información" onclick="introducir()">&nbsp;&nbsp;<input id="preguntar" type="button" class="btn btn-skin scroll" value="Obtener información" onclick="preguntar()"><br><br>
+    <div id="contenido"> </div>
   </div>
   <p>
   NOTA: actualmente solo se encuentra disponible el reconocimiento en el lenguaje Español. <br>    
@@ -139,6 +152,7 @@
     <select id="select_dialect"></select>
   </div>
 </div>
+
 </section>
         <footer>
 		<div class="container">
@@ -168,6 +182,52 @@
     <script src="js/custom.js"></script>
 
 <script>
+$(document).ready(function(){
+            $('#elegirTema').click(function() { 
+                    $('#elegirTema').hide();
+
+            
+                archivoValidacion = "http://sistemasinteligentes.esy.es/Sistemas/ComprobarTemas.php?jsoncallback=?"
+
+                $.getJSON( archivoValidacion)
+                .done(function(respuestaServer) {
+
+                         var output = "<br><h3>Temas</h3>";
+                         output += "<select id='temas'>";
+                         $.each(respuestaServer.temas, function(key,name ) {
+                                   
+                                    $.each(name, function (keyName,temaName) {
+                                        output += "<option value='"+temaName+"'>"+temaName+"</option>";
+                                        
+                                    });
+                         });
+                         
+                         output += "</select><br><br>";
+                         
+                    
+                         $("#contenidoElegir").html(output); 
+                                
+                        
+                         $("#info").show();
+                         $("#derecha").show();
+                         $("#results").show();
+                         $("#centro").show();
+
+                    
+                })
+                
+                
+                
+            
+            })
+            
+
+             
+})    
+
+
+
+
 var langs =
 [['Afrikaans',       ['af-ZA']],
  ['Bahasa Indonesia',['id-ID']],
@@ -346,6 +406,8 @@ function createEmail() {
   var body = encodeURI(final_transcript.substring(n + 1));
   window.location.href = 'mailto:?subject=' + subject + '&body=' + body;
 }
+    
+
 function copyButton() {
   if (recognizing) {
     recognizing = false;
@@ -370,6 +432,7 @@ function emailButton() {
 function startButton(event) {
   if (recognizing) {
     recognition.stop();
+           
     return;
   }
   final_transcript = '';
@@ -406,4 +469,62 @@ function showButtons(style) {
   copy_info.style.display = 'none';
   email_info.style.display = 'none';
 }
+
+function introducir(){
+    
+    // recolecta los valores que inserto el usuario
+    var temaElegido = $("#temas").val();               
+    var pregunta = final_transcript;
+    
+
+
+    archivoValidacion = "http://sistemasinteligentes.esy.es/Sistemas/LeerFichero.php?jsoncallback=?"
+    $.getJSON( archivoValidacion, { pregunta:pregunta, temaElegido: temaElegido})
+    .done(function(respuestaServer) {
+
+
+
+             var output = "<br><br><center><h3>" + respuestaServer.message + "</h3></center>";
+
+
+                                //Actualizamos el HTML del elemento con id="#response-container"
+             $("#contenido").html(output); 
+
+
+
+
+    });
+         
+
+}
+
+function preguntar(){
+     // recolecta los valores que inserto el usuario
+    var temaElegido = $("#temas").val();               
+    var pregunta = final_transcript+"?";
+    
+
+
+    archivoValidacion = "http://sistemasinteligentes.esy.es/Sistemas/LeerFichero.php?jsoncallback=?"
+    $.getJSON( archivoValidacion, { pregunta:pregunta, temaElegido: temaElegido})
+    .done(function(respuestaServer) {
+
+
+
+             var output = "<br><br><center><h3>" + respuestaServer.message + "</h3></center>";
+
+
+                                //Actualizamos el HTML del elemento con id="#response-container"
+             $("#contenido").html(output); 
+
+
+
+
+    });
+    
+}
+
 </script>
+</body>
+
+</html>

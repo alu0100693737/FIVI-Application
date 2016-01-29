@@ -86,14 +86,27 @@
         
         </center></div>
     
-    <div class="center" id="headline"> 
-        <center><h2>Introduzca el texto</h2></center></div>
+      <center><h2>¿De qué tema quieres que hablemos?</h2></center>
     <form id="formulario">
-        <center>Pregunta: </center><center><input type="text" id="pregunta"></center><br><br>
-        <center><input type="submit" class="btn btn-skin scroll" value="Enviar">  &nbsp; &nbsp; <a href="#" class="btn btn-skin scroll" onclick="showAlert(); return false;">Show Alert</a><br><br></center>
-        <div id="contenido"> </div>
+        <div id="Eleccion">
+        <center>
+        <input type="button" id="elegirTema" class="btn btn-skin scroll" value="Escoger un tema:">
+        &nbsp;
 
+        <div id="contenidoElegir"></div>
+       
+        </center>
+        </div>
     
+    
+        <div id="TrasEleccion" style="display:none;">
+        <center><h2>Introduzca el texto</h2></center>
+            
+            <center>Información: </center><center><input type="text" id="pregunta"></center><br><br>
+            <center><input id="enviar" type="submit" class="btn btn-skin scroll" value="Procesar información"></center>
+            <div id="contenido"> </div>
+        </div>
+        
     </form>
     <br><br>
         <footer>
@@ -124,25 +137,78 @@
     <script src="js/custom.js"></script>
     <script type="text/javascript" src="cordova.js"></script>
     <script>
+$(document).ready(function(){
+            $('#elegirTema').click(function() { 
+                    $('#elegirTema').hide();
 
-        $('#formulario').submit(function() { 
-            // recolecta los valores que inserto el usuario
-        var pregunta = $("#pregunta").val()
+            
+                archivoValidacion = "http://sistemasinteligentes.esy.es/Sistemas/ComprobarTemas.php?jsoncallback=?"
 
-        archivoValidacion = "http://interfacesinteligentes.hol.es/Interfaces/Reconocimiento2301_1053/LeerFichero.php?jsoncallback=?"
+                $.getJSON( archivoValidacion)
+                .done(function(respuestaServer) {
 
-        $.getJSON( archivoValidacion, { pregunta:pregunta})
-            .done(function(respuestaServer) {
-  
-                var output = "<br><br><center><h3>" + respuestaServer.message + "</h3></center>";
-                //Actualizamos el HTML del elemento con id="#response-container"
+                         var output = "<br><h3>Temas</h3>";
+                         output += "<select id='temas'>";
+                         $.each(respuestaServer.temas, function(key,name ) {
+                                   
+                                    $.each(name, function (keyName,temaName) {
+                                        output += "<option value='"+temaName+"'>"+temaName+"</option>";
+                                        
+                                    });
+                         });
+                         
+                         output += "</select><br><br>";
+                         output += "<br><br><center><h5>*No olvide para introducir información escriba sin interrogantes y para obtener información úselos</h5></center>";
+                    
+                         $("#contenidoElegir").html(output); 
+                                
+                        
+                         $("#TrasEleccion").show();
+                         
+                        
+
+                    
+                })
+                
+                
+                
+            
+            })
+            
+
+             
+})
+
+
+$('#formulario').submit(function() {
+                
+                // recolecta los valores que inserto el usuario
+                var temaElegido = $("#temas").val();               
+                var pregunta = $("#pregunta").val()
+
+
+                archivoValidacion = "http://sistemasinteligentes.esy.es/Sistemas/LeerFichero.php?jsoncallback=?"
+                $.getJSON( archivoValidacion, { pregunta:pregunta, temaElegido: temaElegido})
+                .done(function(respuestaServer) {
+
+
+                    
+                         var output = "<br><br><center><h3>" + respuestaServer.message + "</h3></center>";
+                                            
+
+                                            //Actualizamos el HTML del elemento con id="#response-container"
                          $("#contenido").html(output); 
-  
+                        
+                        
+
+                    
                 })
                 return false;
-            })
+})
+   
 	
     </script>
+
 </body>
 
 </html>
