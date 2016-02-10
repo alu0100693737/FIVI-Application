@@ -4,7 +4,7 @@ Se ha utilizado HTML, JavaScript, CSS, PHP, JSon, JQuery y PhoneGap para crear u
 
 Github: https://github.com/alu0100693737/Phonegap
 
-Pag web: http://alu0100693737.github.io/Phonegap/www/
+Pag web: http://alu0100693737.github.io/FIVI-Application/www/
 
 Dos ramas: movil-pages y gh-pages 
 
