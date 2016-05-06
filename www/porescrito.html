@@ -14,42 +14,120 @@
 	<link href="color/default.css" rel="stylesheet">
     <script type="text/javascript" charset="utf-8"> </script>
     <title>Reconocimiento FIVI por escrito</title>
-    
+
     <style>input[type=text] {
   width: 400px;
     height: 200px;
   -webkit-transition: ease-in-out, width .35s ease-in-out;
   transition: ease-in-out,width .35s ease-in-out;
-        </style>
+
+
+        }</style><style>
+
+  #headline {
+    font-size: 35px;
+    font-weight: 250;
+  }
+  #headline2 {
+    font-size: 32px;
+    font-weight: 250;
+  }
+    #headline3 {
+    font-size: 12px;
+    font-weight: 250;
+  }
+  #results {
+    font-size: 14px;
+    font-weight: bold;
+    border: 1px solid #ddd;
+    padding: 15px;
+    text-align: left;
+    min-height: 150px;
+  }
+
+</style>
+    <script type="text/javascript" src="js/globalization.js"></script>
+    <script type="text/javascript" src="js/devicemotion.js"></script>
+    <script type="text/javascript" src="js/geolocalizacion.js"></script>
+
+
+
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+
+    <script>
+        document.addEventListener("deviceready", onDeviceReady, false);
+    // PhoneGap is ready
+    //
+    function onDeviceReady() {
+        // Empty
     }
+
+    // alert dialog dismissed
+    function alertDismissed() {
+        // do something
+    }
+
+    // Show a custom alert
+    //
+    function showAlert() {
+        alert("ALERTAAAAAA ");
+    }
+        </script>
 </head>
 <body>
-    <center><h2>Introduzca el texto</h2></center>
-    <form action="javascript/fichero.js">
-        <center>Pregunta: </center><center><input type="text" name="fname";></center><br><br>
-        <center><input type="submit" value="Submit"></center>
+    <div class="center" id="headline2">
+
+       <!-- <center><div id="globalization"><h3>Esperando por el sensor globalization</h3></div></center></div>
+    <div class="center" id="headline3">
+    <center><div id="geolocation" >Watching geolocation...</div>
+<!--<div id="orientation">Watching orientation...</div>
+
+        </center></div>-->
+
+      <center><h2>¿De qué tema quieres que hablemos?</h2></center>
+    <form id="formulario">
+        <div id="Eleccion">
+        <center>
+        <input type="button" id="elegirTema" class="btn btn-skin scroll" value="Escoger un tema:">
+        &nbsp;
+
+        <div id="contenidoElegir"></div>
+
+        </center>
+        </div>
+
+
+        <div id="TrasEleccion" style="display:none;">
+        <center><h2>Introduzca el texto</h2></center>
+
+            <center>Información: </center><center><input type="text" id="pregunta"></center><br><br>
+            <center><input id="enviar" type="submit" class="btn btn-skin scroll" value="Procesar información"></center>
+            <div id="contenido"> </div>
+        </div>
+
     </form>
     <br><br>
-    	</section>
         <footer>
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12 col-lg-12">
 					<p>Copyright &copy; 2016 FIVI - by Iván García Campos y Estefanía Morales Luis</p>
 				</div>
-                <!-- 
-                    All links in the footer should remain intact. 
+                <!--
+                    All links in the footer should remain intact.
                     Licenseing information is available at: http://bootstraptaste.com/license/
                     You can buy this theme without footer links online at: http://bootstraptaste.com/buy/?theme=Ninestars
                 -->
-			</div>	
+			</div>
 		</div>
 	</footer>
 
     <!-- Core JavaScript Files -->
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.easing.min.js"></script>	
+    <script src="js/jquery.easing.min.js"></script>
 	<script src="js/classie.js"></script>
 	<script src="js/gnmenu.js"></script>
 	<script src="js/jquery.scrollTo.js"></script>
@@ -57,6 +135,79 @@
 	<script src="js/stellar.js"></script>
     <!-- Custom Theme JavaScript -->
     <script src="js/custom.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script>
+$(document).ready(function(){
+            $('#elegirTema').click(function() {
+                    $('#elegirTema').hide();
+
+
+                archivoValidacion = "http://interfacesinteligentes.esy.es/Sistemas/ComprobarTemas.php?jsoncallback=?"
+
+                $.getJSON( archivoValidacion)
+                .done(function(respuestaServer) {
+
+                         var output = "<br><h3>Temas</h3>";
+                         output += "<select id='temas'>";
+                         $.each(respuestaServer.temas, function(key,name ) {
+
+                                    $.each(name, function (keyName,temaName) {
+                                        output += "<option value='"+temaName+"'>"+temaName+"</option>";
+
+                                    });
+                         });
+
+                         output += "</select><br><br>";
+                         output += "<br><br><center><h5>*No olvide para introducir información escriba sin interrogantes y para obtener información úselos</h5></center>";
+
+                         $("#contenidoElegir").html(output);
+
+
+                         $("#TrasEleccion").show();
+
+
+
+
+                })
+
+
+
+
+            })
+
+
+
+})
+
+
+$('#formulario').submit(function() {
+
+                // recolecta los valores que inserto el usuario
+                var temaElegido = $("#temas").val();
+                var pregunta = $("#pregunta").val()
+
+
+                archivoValidacion = "http://interfacesinteligentes.esy.es/Sistemas/LeerFichero.php?jsoncallback=?"
+                $.getJSON( archivoValidacion, { pregunta:pregunta, temaElegido: temaElegido})
+                .done(function(respuestaServer) {
+
+
+
+                         var output = "<br><br><center><h3>" + respuestaServer.message + "</h3></center>";
+
+
+                                            //Actualizamos el HTML del elemento con id="#response-container"
+                         $("#contenido").html(output);
+
+
+
+
+                })
+                return false;
+})
+
+
+    </script>
 
 </body>
 

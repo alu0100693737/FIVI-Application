@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Fonts -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link href="css/nivo-lightbox.css" rel="stylesheet" />
+	<link href="css/nivo-lightbox-theme/default/default.css" rel="stylesheet" type="text/css" />
+	<link href="css/animate.css" rel="stylesheet" />
+    <!-- Squad theme CSS -->
+    <link href="css/style.css" rel="stylesheet">
+	<link href="color/default.css" rel="stylesheet">
+    <script type="text/javascript" charset="utf-8"> </script>
+    <title>Reconocimiento FIVI por escrito</title>
+
+    <style>input[type=text] {
+  width: 400px;
+    height: 200px;
+  -webkit-transition: ease-in-out, width .35s ease-in-out;
+  transition: ease-in-out,width .35s ease-in-out;
+        </style>
+    }
+
+
+</head>
+<body>
+    <center><h2>¿De qué tema quieres que hablemos?</h2></center>
+    <form id="formulario">
+        <center>
+        <a href="porvoz.html" target="_self"><input type="button" class="btn btn-skin scroll" value="Elección del tema"></a><br><br><br>
+            <br><br>
+        <hr />
+        <input type="text" style="WIDTH: 228px; HEIGHT: 98px"
+size=15 id="tema"><br><br>
+        <input type="button" id="nuevoTema" class="btn btn-skin scroll" value="Crear Tema">
+        <div id="contenido"></div>
+        </center>
+
+    </form>
+    <br><br>
+    	</section>
+        <footer>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 col-lg-12">
+					<p>Copyright &copy; 2016 FIVI - by Iván García Campos y Estefanía Morales Luis</p>
+				</div>
+                <!--
+                    All links in the footer should remain intact.
+                    Licenseing information is available at: http://bootstraptaste.com/license/
+                    You can buy this theme without footer links online at: http://bootstraptaste.com/buy/?theme=Ninestars
+                -->
+			</div>
+		</div>
+	</footer>
+
+    <!-- Core JavaScript Files -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.easing.min.js"></script>
+	<script src="js/classie.js"></script>
+	<script src="js/gnmenu.js"></script>
+	<script src="js/jquery.scrollTo.js"></script>
+	<script src="js/nivo-lightbox.min.js"></script>
+	<script src="js/stellar.js"></script>
+    <!-- Custom Theme JavaScript -->
+    <script src="js/custom.js"></script>
+
+    <script>
+     $(document).ready(function(){
+            $('#nuevoTema').click(function() {
+
+
+                var tema = $('#tema').val();
+                archivoValidacion = "http://interfacesinteligentes.esy.es/Sistemas/NuevoTema.php?jsoncallback=?"
+
+                $.getJSON( archivoValidacion,{tema:tema})
+                .done(function(respuestaServer) {
+
+                         var output = "<br><br><center><h3>" + respuestaServer.message + "</h3></center>";
+                         $("#contenido").html(output);
+
+
+
+
+
+                })
+
+
+
+
+            })
+
+
+     })
+    </script>
+
+</body>
+
+</html>
