@@ -50,33 +50,77 @@
     <script type="text/javascript" src="js/devicemotion.js"></script>
     <script type="text/javascript" src="js/geolocalizacion.js"></script>
 
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
 
+<!-- Acelerometro-->
+<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+<script type="text/javascript" charset="utf-8">
+var aux; //acelerometro
+var watchID = null; //geolocalizacion
+function onLoad() {
+    document.addEventListener("deviceready", onDeviceReady, false);
+}
 
-        <meta name="format-detection" content="telephone=no">
-        <meta name="msapplication-tap-highlight" content="no">
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+function onDeviceReady() {
+    //alert("Puede utilizar el acelerometro para enviar la informacion");
+    startWatch();
 
-    <script>
-        document.addEventListener("deviceready", onDeviceReady, false);
-    // PhoneGap is ready
-    //
-    function onDeviceReady() {
-        // Empty
-    }
+    // Update every 2 seconds geolocalizacion
+    var options = { frequency: 2000 };
+    watchID = navigator.geolocation.watchPosition(onSuccess, onError, options);
+}
 
-    // alert dialog dismissed
-    function alertDismissed() {
-        // do something
-    }
+function getAcceleration(){
+    navigator.accelerometer.getCurrentAcceleration(onAccelSuccess, onError);
+}
 
-    // Show a custom alert
-    //
-    function showAlert() {
-        alert("ALERTAAAAAA ");
-    }
-        </script>
+function onAccelSuccess(acceleration) {
+  if(aux == null) {
+    aux = acceleration.y;
+  } else if((aux > 6) && (acceleration.y < -4)) {
+    var pregunta = document.getElementById('pregunta');
+    if(pregunta.value == '') {
+    alert("Debe escribir una pregunta para poder procesarla");
+  } else {
+    alert("Enviando informacion");
+  }
+  } else {
+    aux = acceleration.y;
+  }
+    var element = document.getElementById('accelerometer');
+    element.innerHTML = 'Acceleration Y: ' + acceleration.y + '<br />';
+}
+
+function onError() {
+    alert('onError!');
+}
+
+function startWatch() {
+    // Update acceleration every 1 seconds
+    var options = { frequency: 3000 };
+    watchID = navigator.accelerometer.watchAcceleration(onAccelSuccess, onError, options);
+}
+// onSuccess Geolocation
+//
+function onSuccess(position) {
+var element = document.getElementById('geolocation');
+
+element.innerHTML = 'Latitude: '  + position.coords.latitude      + '<br />' +
+                    'Longitude: ' + position.coords.longitude     + '<br />';
+}
+
+// onError Callback receives a PositionError object
+//
+function onError(error) {
+  alert('code: '    + error.code    + '\n' +
+      'message: ' + error.message + '\n');
+}
+</script>
+
 </head>
-<body>
+<body onload="onLoad()">
     <div class="center" id="headline2">
 
        <!-- <center><div id="globalization"><h3>Esperando por el sensor globalization</h3></div></center></div>
@@ -85,7 +129,7 @@
 <!--<div id="orientation">Watching orientation...</div>
 
         </center></div>-->
-
+      <br>
       <center><h2>¿De qué tema quieres que hablemos?</h2></center>
     <form id="formulario">
         <div id="Eleccion">
@@ -94,21 +138,25 @@
         &nbsp;
 
         <div id="contenidoElegir"></div>
-
         </center>
         </div>
-
-
         <div id="TrasEleccion" style="display:none;">
         <center><h2>Introduzca el texto</h2></center>
-
             <center>Información: </center><center><input type="text" id="pregunta"></center><br><br>
             <center><input id="enviar" type="submit" class="btn btn-skin scroll" value="Procesar información"></center>
             <div id="contenido"> </div>
         </div>
-
     </form>
     <br><br>
+    <!--<p>
+        <button onclick="startWatch()">Watch Acceleration</button>
+    </p>
+    <p>
+        <button onclick="stopWatch()">Stop Watching Acceleration</button>
+    </p>-->
+    <div id="accelerometer">Waiting for accelerometer...</div>
+    <br><br>
+    <div id="geolocation" class="boton">Watching geolocation...</div><br><br>
         <footer>
 		<div class="container">
 			<div class="row">
@@ -123,7 +171,6 @@
 			</div>
 		</div>
 	</footer>
-
     <!-- Core JavaScript Files -->
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
@@ -153,7 +200,6 @@ $(document).ready(function(){
 
                                     $.each(name, function (keyName,temaName) {
                                         output += "<option value='"+temaName+"'>"+temaName+"</option>";
-
                                     });
                          });
 
