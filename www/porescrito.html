@@ -105,21 +105,33 @@ function startWatch() {
 // onSuccess Geolocation
 //
 function onSuccess(position) {
-var element = document.getElementById('geolocation');
+  var element = document.getElementById('geolocation');
+  var latitud = document.getElementById('latitud');
+  var longitud = document.getElementById('longitud');
+  //Centro de calculo
+  if(((position.coords.latitude >= 28.4826) && (position.coords.latitude < 28.4828)) && ((position.coords.longitude >= -16.3217) && (position.coords.longitude <= -16.3215))) {
+    document.body.style.backgroundColor = #A9F5F2;
+    //Aula 1.3
+  } else if (((position.coords.latitude >= 28.4827) && (position.coords.latitude <= 28.4829)) && ((position.coords.longitude >= -16.3219) && (position.coords.longitude <= -16.3217))) {
+    document.body.style.backgroundColor = #F2F5A9;
+    //bar
+  } else if(((position.coords.latitude >= 28.4825) && (position.coords.latitude <= 28.48265)) && ((position.coords.longitude >= -16.3223) && (position.coords.longitude < -16.3220))) {
+    document.body.style.backgroundColor = #F6CED8;
+  }
+  //túnel
+  if(((position.coords.latitude >= 28.32) && (position.coords.latitude < 28.4828)) && ((position.coords.longitude >= -16.854) && (position.coords.longitude <= -16.21))) {
+    document.body.style.backgroundColor = #A9F5F2;
+    //Aula 1.3
+  }
 
-//Centro de calculo
-if(((position.coords.latitude >= 28.4826) && (position.coords.latitude < 28.4828)) && ((position.coords.longitude >= -16.3217) && (position.coords.longitude <= -16.3215))) {
-  document.body.style.backgroundColor = #A9F5F2;
-  //Aula 1.3
-} else if (((position.coords.latitude >= 28.4827) && (position.coords.latitude <= 28.4829)) && ((position.coords.longitude >= -16.3219) && (position.coords.longitude <= -16.3217))) {
-  document.body.style.backgroundColor = #F2F5A9;
-  //bar
-} else if(((position.coords.latitude >= 28.4825) && (position.coords.latitude <= 28.48265)) && ((position.coords.longitude >= -16.3223) && (position.coords.longitude < -16.3220))) {
-  document.body.style.backgroundColor = #F6CED8;
-}
+  latitud.innerHTML = 'Latitud: '+position.coords.latitude;
+  longitud.innerHTML = 'Longitud: '+position.coords.longitude;
+  element.innerHTML = 'Latitude:'  + position.coords.latitude      + '<br />' +
+                      'Longitude:' + position.coords.longitude     + ':<br />';
 
-element.innerHTML = 'Latitude: '  + position.coords.latitude      + '<br />' +
-                    'Longitude: ' + position.coords.longitude     + '<br />';
+
+
+
 }
 
 // onError Callback receives a PositionError object
@@ -156,6 +168,7 @@ function onError(error) {
             <center>Información: </center><center><input type="text" id="pregunta"></center><br><br>
             <center><input id="enviar" type="submit" class="btn btn-skin scroll" value="Procesar información"></center>
             <div id="contenido"> </div>
+
         </div>
     </form>
     <br><br>
@@ -167,7 +180,10 @@ function onError(error) {
     </p>-->
     <div id="accelerometer">Waiting for accelerometer...</div>
     <br><br>
+    <div id="latitud"></div>
+    <div id="longitud"></div>
     <div id="geolocation" class="boton">Watching geolocation...</div><br><br>
+
         <footer>
 		<div class="container">
 			<div class="row">
@@ -243,23 +259,65 @@ $('#formulario').submit(function() {
                 var temaElegido = $("#temas").val();
                 var pregunta = $("#pregunta").val()
 
-
                 archivoValidacion = "http://interfacesinteligentes.esy.es/Sistemas/LeerFichero.php?jsoncallback=?"
-                $.getJSON( archivoValidacion, { pregunta:pregunta, temaElegido: temaElegido})
-                .done(function(respuestaServer) {
+                //Añadido para latitud y longitud
+                if(temaElegido == "Examenes"){
+                  var geolocation = $("#geolocation").text();
+
+                  alert("Soy geolocation "+geolocation);
+                    // var latitud = $("#latitud").text();
+                    // var longitud = $("#longitud").text();
+                    // alert("Estamos en longitud: "+longitud+" y latitud: "+latitud);
+                    // var latitud = 28.4875;
+                    // var longitud = -16.3028;
+                    // $.getJSON( archivoValidacion, { pregunta:pregunta, temaElegido: temaElegido, latitud:latitud, longitud:longitud})
+                    // .done(function(respuestaServer) {
+                    //
+                    //
+                    //
+                    //          var output = "<br><br><center><h3>" + respuestaServer.message + "</h3></center>";
+                    //
+                    //
+                    //                             //Actualizamos el HTML del elemento con id="#response-container"
+                    //          $("#contenido").html(output);
+                    //
+                    //
+                    //
+                    //
+                    // })
+                    $.getJSON( archivoValidacion, { pregunta:pregunta, temaElegido: temaElegido, geolocation:geolocation})
+                    .done(function(respuestaServer) {
 
 
 
-                         var output = "<br><br><center><h3>" + respuestaServer.message + "</h3></center>";
+                             var output = "<br><br><center><h3>" + respuestaServer.message + "</h3></center>";
 
 
-                                            //Actualizamos el HTML del elemento con id="#response-container"
-                         $("#contenido").html(output);
+                                                //Actualizamos el HTML del elemento con id="#response-container"
+                             $("#contenido").html(output);
 
 
 
 
-                })
+                    })
+
+                }else{
+                    $.getJSON( archivoValidacion, { pregunta:pregunta, temaElegido: temaElegido})
+                    .done(function(respuestaServer) {
+
+
+
+                             var output = "<br><br><center><h3>" + respuestaServer.message + "</h3></center>";
+
+
+                                                //Actualizamos el HTML del elemento con id="#response-container"
+                             $("#contenido").html(output);
+
+
+
+
+                    })
+                 }
                 return false;
 })
 
