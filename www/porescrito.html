@@ -20,10 +20,7 @@
     height: 200px;
   -webkit-transition: ease-in-out, width .35s ease-in-out;
   transition: ease-in-out,width .35s ease-in-out;
-
-
         }</style><style>
-
   #headline {
     font-size: 35px;
     font-weight: 250;
@@ -44,11 +41,8 @@
     text-align: left;
     min-height: 150px;
   }
-
 </style>
-    <script type="text/javascript" src="js/globalization.js"></script>
     <script type="text/javascript" src="js/devicemotion.js"></script>
-    <script type="text/javascript" src="js/geolocalizacion.js"></script>
 
     <meta name="format-detection" content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
@@ -58,24 +52,21 @@
 <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
 <script type="text/javascript" charset="utf-8">
 var aux; //acelerometro
+var i = 0;
 var watchID = null; //geolocalizacion
 function onLoad() {
     document.addEventListener("deviceready", onDeviceReady, false);
 }
-
 function onDeviceReady() {
     //alert("Puede utilizar el acelerometro para enviar la informacion");
     startWatch();
-
-    // Update every second geolocalizacion
-    var options = { frequency: 500 };
+    // Update every 2 seconds geolocalizacion
+    var options = { frequency: 1 };
     watchID = navigator.geolocation.watchPosition(onSuccess, onError, options);
 }
-
 function getAcceleration(){
     navigator.accelerometer.getCurrentAcceleration(onAccelSuccess, onError);
 }
-
 function onAccelSuccess(acceleration) {
   if(aux == null) {
     aux = acceleration.y;
@@ -92,48 +83,42 @@ function onAccelSuccess(acceleration) {
     var element = document.getElementById('accelerometer');
     element.innerHTML = 'Acceleration Y: ' + acceleration.y + '<br />';
 }
-
 function onError() {
     alert('onError!');
 }
-
 function startWatch() {
     // Update acceleration every 1 seconds
-    var options = { frequency: 3000 };
+    var options = { frequency: 2000 };
     watchID = navigator.accelerometer.watchAcceleration(onAccelSuccess, onError, options);
 }
 // onSuccess Geolocation
 //
 function onSuccess(position) {
-  var element = document.getElementById('geolocation');
-  var latitud = document.getElementById('latitud');
-  var longitud = document.getElementById('longitud');
   //Centro de calculo
   if(((position.coords.latitude >= 28.4826) && (position.coords.latitude < 28.4828)) && ((position.coords.longitude >= -16.3217) && (position.coords.longitude <= -16.3215))) {
-    document.body.style.backgroundColor = #A9F5F2;
+    alert("CENTRO DE CALCULO");
+    document.body.style.backgroundColor = "pink";
     //Aula 1.3
   } else if (((position.coords.latitude >= 28.4827) && (position.coords.latitude <= 28.4829)) && ((position.coords.longitude >= -16.3219) && (position.coords.longitude <= -16.3217))) {
-    document.body.style.backgroundColor = #F2F5A9;
+    alert("Aula 1.3");
+    document.body.style.backgroundColor = "green";
     //bar
   } else if(((position.coords.latitude >= 28.4825) && (position.coords.latitude <= 28.48265)) && ((position.coords.longitude >= -16.3223) && (position.coords.longitude < -16.3220))) {
-    document.body.style.backgroundColor = #F6CED8;
+    alert("BAR");
+    document.body.style.backgroundColor = "yellow";
   }
   //túnel
   if(((position.coords.latitude >= 28.32) && (position.coords.latitude < 28.4828)) && ((position.coords.longitude >= -16.854) && (position.coords.longitude <= -16.21))) {
-    document.body.style.backgroundColor = #A9F5F2;
+    alert("OSL");
+    document.body.style.backgroundColor = "blue";
     //Aula 1.3
   }
 
-  latitud.innerHTML = 'Latitud: '+position.coords.latitude;
-  longitud.innerHTML = 'Longitud: '+position.coords.longitude;
-  element.innerHTML = 'Latitude:'  + position.coords.latitude      + '<br />' +
-                      'Longitude:' + position.coords.longitude     + ':<br />';
-
-
-
-
+  var element = document.getElementById('geolocation');
+  i+= 1;
+  element.innerHTML = 'Latitude: '  + position.coords.latitude      + '<br />' +
+                    'Longitude: ' + position.coords.longitude     + '<br />' + i;
 }
-
 // onError Callback receives a PositionError object
 //
 function onError(error) {
@@ -145,13 +130,6 @@ function onError(error) {
 </head>
 <body onload="onLoad()">
     <div class="center" id="headline2">
-
-       <!-- <center><div id="globalization"><h3>Esperando por el sensor globalization</h3></div></center></div>
-    <div class="center" id="headline3">
-    <center><div id="geolocation" >Watching geolocation...</div>
-<!--<div id="orientation">Watching orientation...</div>
-
-        </center></div>-->
       <br>
       <center><h2>¿De qué tema quieres que hablemos?</h2></center>
     <form id="formulario">
@@ -168,7 +146,6 @@ function onError(error) {
             <center>Información: </center><center><input type="text" id="pregunta"></center><br><br>
             <center><input id="enviar" type="submit" class="btn btn-skin scroll" value="Procesar información"></center>
             <div id="contenido"> </div>
-
         </div>
     </form>
     <br><br>
@@ -180,10 +157,7 @@ function onError(error) {
     </p>-->
     <div id="accelerometer">Waiting for accelerometer...</div>
     <br><br>
-    <div id="latitud"></div>
-    <div id="longitud"></div>
     <div id="geolocation" class="boton">Watching geolocation...</div><br><br>
-
         <footer>
 		<div class="container">
 			<div class="row">
@@ -214,114 +188,36 @@ function onError(error) {
 $(document).ready(function(){
             $('#elegirTema').click(function() {
                     $('#elegirTema').hide();
-
-
                 archivoValidacion = "http://interfacesinteligentes.esy.es/Sistemas/ComprobarTemas.php?jsoncallback=?"
-
                 $.getJSON( archivoValidacion)
                 .done(function(respuestaServer) {
-
                          var output = "<br><h3>Temas</h3>";
                          output += "<select id='temas'>";
                          $.each(respuestaServer.temas, function(key,name ) {
-
                                     $.each(name, function (keyName,temaName) {
                                         output += "<option value='"+temaName+"'>"+temaName+"</option>";
                                     });
                          });
-
                          output += "</select><br><br>";
                          output += "<br><br><center><h5>*No olvide para introducir información escriba sin interrogantes y para obtener información úselos</h5></center>";
-
                          $("#contenidoElegir").html(output);
-
-
                          $("#TrasEleccion").show();
-
-
-
-
                 })
-
-
-
-
             })
-
-
-
 })
-
-
 $('#formulario').submit(function() {
-
                 // recolecta los valores que inserto el usuario
                 var temaElegido = $("#temas").val();
                 var pregunta = $("#pregunta").val()
-
                 archivoValidacion = "http://interfacesinteligentes.esy.es/Sistemas/LeerFichero.php?jsoncallback=?"
-                //Añadido para latitud y longitud
-                if(temaElegido == "Examenes"){
-                  var geolocation = $("#geolocation").text();
-
-                  alert("Soy geolocation "+geolocation);
-                    // var latitud = $("#latitud").text();
-                    // var longitud = $("#longitud").text();
-                    // alert("Estamos en longitud: "+longitud+" y latitud: "+latitud);
-                    // var latitud = 28.4875;
-                    // var longitud = -16.3028;
-                    // $.getJSON( archivoValidacion, { pregunta:pregunta, temaElegido: temaElegido, latitud:latitud, longitud:longitud})
-                    // .done(function(respuestaServer) {
-                    //
-                    //
-                    //
-                    //          var output = "<br><br><center><h3>" + respuestaServer.message + "</h3></center>";
-                    //
-                    //
-                    //                             //Actualizamos el HTML del elemento con id="#response-container"
-                    //          $("#contenido").html(output);
-                    //
-                    //
-                    //
-                    //
-                    // })
-                    $.getJSON( archivoValidacion, { pregunta:pregunta, temaElegido: temaElegido, geolocation:geolocation})
-                    .done(function(respuestaServer) {
-
-
-
-                             var output = "<br><br><center><h3>" + respuestaServer.message + "</h3></center>";
-
-
-                                                //Actualizamos el HTML del elemento con id="#response-container"
-                             $("#contenido").html(output);
-
-
-
-
-                    })
-
-                }else{
-                    $.getJSON( archivoValidacion, { pregunta:pregunta, temaElegido: temaElegido})
-                    .done(function(respuestaServer) {
-
-
-
-                             var output = "<br><br><center><h3>" + respuestaServer.message + "</h3></center>";
-
-
-                                                //Actualizamos el HTML del elemento con id="#response-container"
-                             $("#contenido").html(output);
-
-
-
-
-                    })
-                 }
+                $.getJSON( archivoValidacion, { pregunta:pregunta, temaElegido: temaElegido})
+                .done(function(respuestaServer) {
+                         var output = "<br><br><center><h3>" + respuestaServer.message + "</h3></center>";
+                                            //Actualizamos el HTML del elemento con id="#response-container"
+                         $("#contenido").html(output);
+                })
                 return false;
 })
-
-
     </script>
 
 </body>
