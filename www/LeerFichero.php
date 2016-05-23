@@ -33,14 +33,9 @@ if($preguntaOinformacion != "?"){
               $lineaEnPartes = explode(",",$linea);
               $latitudFichero = (double)($lineaEnPartes[1]);
               $longitudFichero = (double)($lineaEnPartes[2]);
-              $geolocalizacion = $_GET['geolocation'];
-              $geolocation = explode(":",$geolocalizacion);
-              $latitud = (double)$geolocation[1];
-              $longitud=(double)$geolocation[3];
-              // $latitud = $_GET["latitud"];
-              // $longitud = $_GET["longitud"];
-              // $latitud = (double)$latitud;
-              // $longitud = (double)$longitud;
+              $latitud = (double)($_GET["latitud"]);
+              $longitud = (double)($_GET["longitud"]);
+
               if((($latitudFichero >= ($latitud-0.5)) && ($latitudFichero <= ($latitud+0.5))) && (($longitudFichero >= ($longitud-0.5)) && ($longitudFichero <= ($longitud+0.5)))){
                     $jsondata["message"] = $lineaEnPartes[0];
               }else{

@@ -73,15 +73,43 @@ function onAccelSuccess(acceleration) {
   } else if((aux > 6) && (acceleration.y < -4)) {
     var pregunta = document.getElementById('pregunta');
     if(pregunta.value == '') {
-    alert("Debe escribir una pregunta para poder procesarla");
-  } else {
-    alert("Enviando informacion");
-  }
+      alert("Debe escribir una pregunta para poder procesarla");
+    } else {
+        alert("Enviando informacion");
+        var temaElegido = $("#temas").val();
+        var pregunta = $("#pregunta").val()
+        archivoValidacion = "http://interfacesinteligentes.esy.es/Sistemas/LeerFichero.php?jsoncallback=?"
+        //Añadido para latitud y longitud
+          if(temaElegido == "Examenes"){
+              var latitud = $("#latitud").text();
+              var longitud = $("#longitud").text();
+              alert("Estamos en longitud: "+longitud+" y latitud: "+latitud);
+              $.getJSON( archivoValidacion, { pregunta:pregunta, temaElegido: temaElegido, latitud:latitud, longitud:longitud})
+              .done(function(respuestaServer) {
+                       var output = "<br><br><center><h3>" + respuestaServer.message + "</h3></center>";
+                      //Actualizamos el HTML del elemento con id="#response-container"
+                       $("#contenido").html(output);
+
+
+
+
+              })
+
+          }else{
+              $.getJSON( archivoValidacion, { pregunta:pregunta, temaElegido: temaElegido})
+              .done(function(respuestaServer) {
+                       var output = "<br><br><center><h3>" + respuestaServer.message + "</h3></center>";
+                      //Actualizamos el HTML del elemento con id="#response-container"
+                       $("#contenido").html(output);
+
+              })
+           }
+    }
   } else {
     aux = acceleration.y;
   }
-    var element = document.getElementById('accelerometer');
-    element.innerHTML = 'Acceleration Y: ' + acceleration.y + '<br />';
+  var element = document.getElementById('accelerometer');
+  element.innerHTML = 'Acceleration Y: ' + acceleration.y + '<br />';
 }
 function onError() {
     alert('onError!');
@@ -109,15 +137,18 @@ function onSuccess(position) {
   }
   //túnel
   if(((position.coords.latitude >= 28.32) && (position.coords.latitude < 28.4828)) && ((position.coords.longitude >= -16.854) && (position.coords.longitude <= -16.21))) {
-    alert("OSL");
     document.body.style.backgroundColor = "blue";
     //Aula 1.3
   }
 
   var element = document.getElementById('geolocation');
+  var latitud = document.getElementById('latitud');
+  var longitud = document.getElementById('longitud');
   i+= 1;
   element.innerHTML = 'Latitude: '  + position.coords.latitude      + '<br />' +
                     'Longitude: ' + position.coords.longitude     + '<br />' + i;
+  latitud.innerHTML = position.coords.latitude;
+  longitud.innerHTML = position.coords.longitude;
 }
 // onError Callback receives a PositionError object
 //
@@ -155,6 +186,8 @@ function onError(error) {
     <p>
         <button onclick="stopWatch()">Stop Watching Acceleration</button>
     </p>-->
+    <div id="latitud"></div>
+    <div id="longitud"></div>
     <div id="accelerometer">Waiting for accelerometer...</div>
     <br><br>
     <div id="geolocation" class="boton">Watching geolocation...</div><br><br>
@@ -210,12 +243,31 @@ $('#formulario').submit(function() {
                 var temaElegido = $("#temas").val();
                 var pregunta = $("#pregunta").val()
                 archivoValidacion = "http://interfacesinteligentes.esy.es/Sistemas/LeerFichero.php?jsoncallback=?"
-                $.getJSON( archivoValidacion, { pregunta:pregunta, temaElegido: temaElegido})
-                .done(function(respuestaServer) {
-                         var output = "<br><br><center><h3>" + respuestaServer.message + "</h3></center>";
-                                            //Actualizamos el HTML del elemento con id="#response-container"
-                         $("#contenido").html(output);
-                })
+                //Añadido para latitud y longitud
+                  if(temaElegido == "Examenes"){
+                      var latitud = $("#latitud").text();
+                      var longitud = $("#longitud").text();
+                      alert("Estamos en longitud: "+longitud+" y latitud: "+latitud);
+                      $.getJSON( archivoValidacion, { pregunta:pregunta, temaElegido: temaElegido, latitud:latitud, longitud:longitud})
+                      .done(function(respuestaServer) {
+                               var output = "<br><br><center><h3>" + respuestaServer.message + "</h3></center>";
+                              //Actualizamos el HTML del elemento con id="#response-container"
+                               $("#contenido").html(output);
+
+
+
+
+                      })
+
+                  }else{
+                      $.getJSON( archivoValidacion, { pregunta:pregunta, temaElegido: temaElegido})
+                      .done(function(respuestaServer) {
+                               var output = "<br><br><center><h3>" + respuestaServer.message + "</h3></center>";
+                              //Actualizamos el HTML del elemento con id="#response-container"
+                               $("#contenido").html(output);
+
+                      })
+                   }
                 return false;
 })
     </script>
