@@ -121,13 +121,13 @@ function startWatch() {
 //
 function onSuccess(position) {
   //Centro de calculo
-  if(((position.coords.latitude >= 28.4826) && (position.coords.latitude < 28.4828)) && ((position.coords.longitude >= -16.3217) && (position.coords.longitude <= -16.3215))) {
+  if(((position.coords.latitude >= 28.4825) && (position.coords.latitude < 28.4828)) && ((position.coords.longitude >= -16.3217) && (position.coords.longitude <= -16.3215))) {
     alert("CENTRO DE CALCULO");
-    document.body.style.backgroundColor = "pink";
+    document.body.style.backgroundColor = "LightPink";
     //Aula 1.3
-  } else if (((position.coords.latitude >= 28.4827) && (position.coords.latitude <= 28.4829)) && ((position.coords.longitude >= -16.3219) && (position.coords.longitude <= -16.3217))) {
+  } else if (((position.coords.latitude >= 28.48265) && (position.coords.latitude <= 28.48295)) && ((position.coords.longitude >= -16.3219) && (position.coords.longitude <= -16.3217))) {
     alert("Aula 1.3");
-    document.body.style.backgroundColor = "green";
+    document.body.style.backgroundColor = "LightGreen";
     //bar
   } else if(((position.coords.latitude >= 28.4825) && (position.coords.latitude <= 28.48265)) && ((position.coords.longitude >= -16.3223) && (position.coords.longitude < -16.3220))) {
     alert("BAR");
