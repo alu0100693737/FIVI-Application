@@ -31,15 +31,17 @@ if($preguntaOinformacion != "?"){
 
             if(strcmp ($temaElegido , "Examenes" ) == 0){
               $lineaEnPartes = explode(",",$linea);
-              $latitudFichero = (double)($lineaEnPartes[1]);
-              $longitudFichero = (double)($lineaEnPartes[2]);
+              $latitudMaxFichero = (double)($lineaEnPartes[1]);
+              $latitudMinFichero = (double)($lineaEnPartes[2]);
+              $longitudMaxFichero = (double)($lineaEnPartes[3]);
+              $longitudMinFichero = (double)($lineaEnPartes[4]);
               $latitud = (double)($_GET["latitud"]);
               $longitud = (double)($_GET["longitud"]);
 
-              if((($latitudFichero >= ($latitud-0.5)) && ($latitudFichero <= ($latitud+0.5))) && (($longitudFichero >= ($longitud-0.5)) && ($longitudFichero <= ($longitud+0.5)))){
+              if((($latitud >= $latitudMinFichero) && ($latitud <= $latitudMaxFichero)) && (($longitud >= $longitudMinFichero) && ($longitud <= $longitudMaxFichero))){
                     $jsondata["message"] = $lineaEnPartes[0];
               }else{
-                    $jsondata["message"] = "Frase: ".$lineaEnPartes[0]." latitud: ".$latitud." longitud: ".$longitud." y nosotros latitudFichero: ".$latitudFichero." y longitudFichero: ".$longitudFichero." No hay exámenes registrados en esta zona";
+                    $jsondata["message"] = "Ese examen no se realiza en el aula en la que se encuentra";
               }
             }else{
               $jsondata["message"] = $linea;

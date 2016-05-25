@@ -75,7 +75,6 @@ function onAccelSuccess(acceleration) {
     if(pregunta.value == '') {
       alert("Debe escribir una pregunta para poder procesarla");
     } else {
-        alert("Enviando informacion");
         var temaElegido = $("#temas").val();
         var pregunta = $("#pregunta").val()
         archivoValidacion = "http://interfacesinteligentes.esy.es/Sistemas/LeerFichero.php?jsoncallback=?"
@@ -83,7 +82,6 @@ function onAccelSuccess(acceleration) {
           if(temaElegido == "Examenes"){
               var latitud = $("#latitud").text();
               var longitud = $("#longitud").text();
-              alert("Estamos en longitud: "+longitud+" y latitud: "+latitud);
               $.getJSON( archivoValidacion, { pregunta:pregunta, temaElegido: temaElegido, latitud:latitud, longitud:longitud})
               .done(function(respuestaServer) {
                        var output = "<br><br><center><h3>" + respuestaServer.message + "</h3></center>";
@@ -134,11 +132,6 @@ function onSuccess(position) {
   } else if(((position.coords.latitude >= 28.4825) && (position.coords.latitude <= 28.48265)) && ((position.coords.longitude >= -16.3223) && (position.coords.longitude < -16.3220))) {
     alert("BAR");
     document.body.style.backgroundColor = "yellow";
-  }
-  //túnel
-  if(((position.coords.latitude >= 28.32) && (position.coords.latitude < 28.4828)) && ((position.coords.longitude >= -16.854) && (position.coords.longitude <= -16.21))) {
-    document.body.style.backgroundColor = "blue";
-    //Aula 1.3
   }
 
   var element = document.getElementById('geolocation');
@@ -247,7 +240,6 @@ $('#formulario').submit(function() {
                   if(temaElegido == "Examenes"){
                       var latitud = $("#latitud").text();
                       var longitud = $("#longitud").text();
-                      alert("Estamos en longitud: "+longitud+" y latitud: "+latitud);
                       $.getJSON( archivoValidacion, { pregunta:pregunta, temaElegido: temaElegido, latitud:latitud, longitud:longitud})
                       .done(function(respuestaServer) {
                                var output = "<br><br><center><h3>" + respuestaServer.message + "</h3></center>";
